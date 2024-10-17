@@ -1,101 +1,175 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+
+export default function PricingPage() {
+  const [pageViews, setPageViews] = useState(100);
+  const [isYearly, setIsYearly] = useState(false);
+
+  const calculatePrice = (views: number) => {
+    if (views < 100) return 8;
+    if (views >= 100 && views < 500) return 12;
+    if (views >= 500 && views < 1000) return 24;
+    if (views === 1000) return 36;
+    return 16;
+  };
+
+  const basePrice = calculatePrice(pageViews);
+  const price = isYearly ? basePrice * 0.75 : basePrice;
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-blue-50 flex items-center justify-center px-4 py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl w-full"
+      >
+        <div className="text-center mb-12">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="text-xl md:text-4xl font-bold text-gray-900 mb-2"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Simple, traffic-based pricing
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="text-gray-400"
           >
-            Read our docs
-          </a>
+            Sign up for our 30-day trial. No credit card required.
+          </motion.p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="bg-white rounded-xl shadow-lg p-8"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+            <motion.span
+              key={pageViews}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-gray-400 font-semibold"
+            >
+              {pageViews}K PAGEVIEWS
+            </motion.span>
+            <div className="text-right mt-4 md:mt-0">
+              <motion.span
+                key={price}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-5xl font-bold text-gray-900"
+              >
+                ${price.toFixed(2)}
+              </motion.span>
+              <span className="text-gray-400 ml-2">/ month</span>
+            </div>
+          </div>
+
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Slider
+              defaultValue={[100]}
+              max={1000}
+              step={10}
+              onValueChange={(value) => setPageViews(value[0])}
+              className="mb-8"
+            />
+          </motion.div>
+
+          <div className="flex items-center justify-end mb-8">
+            <span className="text-gray-600 text-sm md:text-base mr-4">Monthly Billing</span>
+            <motion.div whileTap={{ scale: 0.9 }}>
+              <Switch checked={isYearly} onCheckedChange={setIsYearly} />
+            </motion.div>
+            <span className="text-gray-600 ml-4">Yearly Billing</span>
+            <AnimatePresence>
+              {isYearly && (
+                <motion.span
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="ml-2 text-sm md:text-base bg-red-100 text-red-800 px-2 py-1 rounded-full"
+                >
+                  25% <span className="hidden md:inline-block">discount</span>
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <hr className="mb-8" />
+
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+            <ul className="space-y-2 mb-4 md:mb-0">
+              <motion.li
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                className="flex items-center text-gray-600"
+              >
+                <CheckIcon className="mr-2" /> Unlimited websites
+              </motion.li>
+              <motion.li
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="flex items-center text-gray-600"
+              >
+                <CheckIcon className="mr-2" /> 100% data ownership
+              </motion.li>
+              <motion.li
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="flex items-center text-gray-600"
+              >
+                <CheckIcon className="mr-2" /> Email reports
+              </motion.li>
+            </ul>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-[#2a3b5b] text-white px-6 py-3 rounded-full font-medium transition-colors hover:bg-[#3b4c6c]"
+            >
+              Start my trial
+            </motion.button>
+          </div>
+        </motion.div>
+      </motion.div>
     </div>
+  );
+}
+
+function CheckIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-5 h-5 text-green-500"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M5 13l4 4L19 7"
+      />
+    </svg>
   );
 }
